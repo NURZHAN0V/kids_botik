@@ -3,6 +3,7 @@ venv/
 env/
 ENV/
 .venv/
+.env/
 
 # Python
 __pycache__/
@@ -26,35 +27,103 @@ share/python-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+MANIFEST
 
-# Конфигурации с токенами
+# Poetry
+poetry.lock
+poetry.toml
+
+# Pip
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Pytest
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb
+
+# Конфигурации с токенами и секретами
 config.py
+secrets.py
+.secrets
+*.key
+*.pem
 
 # Переменные окружения
 .env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+.env.*
+!.env.example
 
-# IDE
+# База данных
+*.db
+*.sqlite
+*.sqlite3
+database.db
+db.sqlite3
+
+# Telegram Bot данные
+bot_data/
+user_data/
+chat_data/
+
+# Логи
+*.log
+logs/
+log/
+
+# IDE и редакторы
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
-
-# Логи
-*.log
-logs/
+.sublime-project
+.sublime-workspace
 
 # Временные файлы
 .tmp/
 temp/
 *.tmp
 *.bak
+*.backup
+*.orig
 
 # Системные файлы
 .DS_Store
 Thumbs.db
 desktop.ini
+*.lnk
+
+# Docker
+Dockerfile.prod
+docker-compose.prod.yml
+.docker/
+
+# Кэш и артефакты
+.cache/
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Документация
+docs/_build/
+site/
+
+# Архивы
+*.zip
+*.tar.gz
+*.rar
+
+# Медиа файлы (если не нужны в репозитории)
+# *.jpg
+# *.jpeg
+# *.png
+# *.gif
+# *.mp4
+# *.mp3
