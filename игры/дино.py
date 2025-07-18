@@ -1,85 +1,75 @@
-def игра_дино():
-    import pygame
+def функция_дино():
     import random
+    import os
+    import time
 
-    # Инициализация
-    pygame.init()
-    WIDTH, HEIGHT = 800, 400
-    screen = pygame.display.set_mode((WIDTH, HEIGHT))
-    pygame.display.set_caption("Dino Game")
-    clock = pygame.time.Clock()
+    def очистить_экран():
+        os.system('cls' if os.name == 'nt' else 'clear')
 
-    # Цвета
-    WHITE = (255, 255, 255)
-    BLACK = (0, 0, 0)
+    print("Добро пожаловать в Дино!")
+    print("Нажми 'пробел' чтобы прыгнуть, 'q' чтобы выйти")
+    input("Нажми Enter, чтобы начать...")
 
-    # Параметры динозавра
-    dino_rect = pygame.Rect(50, HEIGHT - 60, 40, 60)
-    gravity = 0.8
-    jump_speed = -15
-    velocity_y = 0
-    on_ground = True
+    позиция_дино = 0  # 0 - на земле, 1 - в прыжке
+    расстояние = 0
+    счёт = 0
+    кактусы = []
 
-    # Кактусы
-    cactus_list = []
-    SPAWN_CACTUS = pygame.USEREVENT + 1
-    pygame.time.set_timer(SPAWN_CACTUS, 1500)  # Как часто появляются кактусы
+    while True:
+        очистить_экран()
+        
+        # Генерируем кактус
+        if random.randint(1, 4) == 1:
+            кактусы.append(10)
+        
+        # Двигаем кактусы
+        кактусы = [k - 1 for k in кактусы if k > 0]
+        
+        # Рисуем игровое поле
+        поле = [' '] * 10
+        if позиция_дино == 0:
+            поле[0] = '🦕'  # дино на земле
+        else:
+            поле[0] = ' '
+            позиция_дино = 0  # приземляемся после прыжка
+            
+        for кактус_поз in кактусы:
+            if 0 <= кактус_поз < 10:
+                поле[кактус_поз] = '🌵'
+        
+        # Проверяем столкновение
+        if 1 in кактусы and позиция_дино == 0:
+            очистить_экран()
+            print("💀 Столкновение! Игра окончена!")
+            print(f"Твой счёт: {счёт}")
+            break
+            
+        print(f"Счёт: {счёт}")
+        print("Небо:  " + " " * 10)
+        print("Земля: " + "".join(поле))
+        print("Основ: " + "━" * 10)
+        
+        print("\nНажми 'j' для прыжка, Enter для продолжения, 'q' для выхода")
+        
+        # Простой ввод без таймера
+        try:
+            действие = input().lower()
+            if действие == 'q':
+                print("Спасибо за игру!")
+                return
+            elif действие == 'j':
+                позиция_дино = 1
+        except:
+            pass
+            
+        счёт += 1
+        
+        # Увеличиваем сложность
+        if счёт > 20:
+            time.sleep(0.1)
 
-    # Счёт
-    score = 0
-    font = pygame.font.SysFont(None, 36)
-
-    # Основной цикл игры
-    running = True
-    while running:
-        screen.fill(WHITE)
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-            if event.type == SPAWN_CACTUS:
-                cactus_width = random.randint(20, 40)
-                cactus_height = 50
-                cactus_rect = pygame.Rect(WIDTH, HEIGHT - cactus_height, cactus_width, cactus_height)
-                cactus_list.append(cactus_rect)
-
-        # Управление прыжком
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_SPACE] and on_ground:
-            velocity_y = jump_speed
-            on_ground = False
-
-        # Обновление позиции динозавра
-        velocity_y += gravity
-        dino_rect.y += velocity_y
-        if dino_rect.y >= HEIGHT - 60:
-            dino_rect.y = HEIGHT - 60
-            velocity_y = 0
-            on_ground = True
-
-        # Рисуем динозавра
-        pygame.draw.rect(screen, BLACK, dino_rect)
-
-        # Обновляем кактусы
-        for cactus in cactus_list:
-            cactus.x -= 5
-            pygame.draw.rect(screen, BLACK, cactus)
-
-        # Удаляем кактусы за экраном
-        cactus_list = [c for c in cactus_list if c.x > -40]
-
-        # Проверка столкновений
-        for cactus in cactus_list:
-            if dino_rect.colliderect(cactus):
-                print("Game Over! Score:", score)
-                running = False
-
-        # Обновление счёта
-        score += 1
-        score_text = font.render(f"Score: {score}", True, BLACK)
-        screen.blit(score_text, (10, 10))
-
-        pygame.display.flip()
-        clock.tick(60)
-
-    pygame.quit()
+    ещё = input("Хочешь сыграть ещё раз? (да/нет): ").lower()
+    if ещё == "да":
+        функция_дино()
+    else:
+        print("Спасибо за игру! До новых встреч!")
